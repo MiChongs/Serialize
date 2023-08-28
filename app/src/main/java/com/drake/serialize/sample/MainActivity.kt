@@ -24,6 +24,7 @@ import com.drake.engine.base.EngineActivity
 import com.drake.serialize.intent.openActivity
 import com.drake.serialize.sample.constant.AppConfig
 import com.drake.serialize.sample.databinding.ActivityMainBinding
+import com.drake.serialize.sample.model.FunctionModel
 import com.drake.serialize.sample.model.KotlinSerializableModel
 import com.drake.serialize.sample.model.ParcelableModel
 import com.drake.serialize.sample.model.SerializableModel
@@ -44,6 +45,9 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     private val liveData: MutableLiveData<String> by serialLiveData("默认值")
     private var userId: String = "0123"
     private var balance: String by serial("0.0", { "balance-$userId" })
+    private val functionModel: MutableLiveData<MutableList<FunctionModel>> by serialLiveData(
+        mutableListOf()
+    )
 
     override fun initView() {
         binding.v = this
@@ -53,6 +57,9 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
         // 监听本地数据变化
         liveData.observe(this) {
             toast("观察到本地数据: $it")
+        }
+        functionModel.observe(this) {
+            Log.e("FunctionModel", "initData: $it")
         }
     }
 
